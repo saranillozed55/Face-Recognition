@@ -1,53 +1,37 @@
 import { useState } from "react";
 
 function App() {
-  const [response, setResponse] = useState(null);
-  const [loading, setLoading] = useState(false);
 
-  const handleFileChange = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+  // MOVE THIS TO A COMPONENT - WILL JUST BE A BUTTON TO START RUNNING THE FACE RECOGI
 
-    const formData = new FormData();
-    formData.append("file", file);
+  const API_URL = 'http://localhost:8000/api/start-button'
 
-    setLoading(true);
-    try {
-      const res = await fetch("http://localhost:8000/api/process-image", {
-        method: "POST",
-        body: formData,
+  const handleSubmit = async (event) => {
+    try{
+
+      event.preventDefault()
+
+      const response = await fetch(API_URL, {
+        method: 'POST'
       });
 
-      const data = await res.json();
-      console.log("Backend response:", data);
-      setResponse(data);
-    } catch (err) {
-      console.error("Error connecting to backend:", err);
-    } finally {
-      setLoading(false);
+      // just send response to log for now in frontend
+      const data = await response.json();
+      console.log(data.message);
+    }
+    catch (error) {
+      console.error('Error sending item:', error)
     }
   };
 
+
   return (
-    <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center justify-center gap-4 p-8">
-      <h1 className="text-2xl font-bold">Facial Recognition Pipeline Test</h1>
-
-      <input
-        type="file"
-        accept="image/*"
-        onChange={handleFileChange}
-        className="text-sm text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-blue-600 file:text-white hover:file:bg-blue-700"
-      />
-
-      {loading && <p>Sending to backend...</p>}
-
-      {response && (
-        <pre className="bg-gray-800 p-4 rounded w-full max-w-md overflow-auto text-sm">
-          {JSON.stringify(response, null, 2)}
-        </pre>
-      )}
-    </div>
-  );
+  <>
+    <form onSubmit ={handleSubmit}>
+      <button><strong>Start!</strong></button>
+    </form>;
+  </>
+  )
 }
 
 export default App;
