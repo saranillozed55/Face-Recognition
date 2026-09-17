@@ -31,9 +31,8 @@ export default function Webcamcomp() {
         );
 
         mediaRecorderRef.current.start();
-    }, []);
+    }, [handleDataAvailable]);
 
-    
 
     const handleStopCaptureClick = useCallback(() => {
         mediaRecorderRef.current.stop();
@@ -69,7 +68,7 @@ export default function Webcamcomp() {
                 ref={webcamRef}
             />
 
-            {/* {capturing ? (
+            {capturing ? (
                 <button onClick={handleStopCaptureClick}>
                     Stop Capture
                 </button>
@@ -79,11 +78,12 @@ export default function Webcamcomp() {
                 </button>
             )}
 
-            {recordedChunks.length > 0 && (
+            {/* {recordedChunks.length > 0 && (
                 <button onClick={handleDownload}>
                     Download
                 </button>
             )} */}
+
             </div>
         </>
     );
