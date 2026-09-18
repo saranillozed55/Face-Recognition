@@ -1,4 +1,5 @@
-import { useState } from "react";
+
+import Webcamcomp from "./components/Webcamcomp";
 
 function App() {
 
@@ -24,12 +25,13 @@ function App() {
     }
   };
 
-
   return (
   <>
     <form onSubmit ={handleSubmit}>
       <button><strong>Start!</strong></button>
-    </form>;
+    </form>
+    
+    <Webcamcomp></Webcamcomp>
   </>
   )
 }
