@@ -2,6 +2,7 @@ services:
   backend:
     build: ./backend
     ports:
+        #port forwarding 
       - "8000:8000"
     volumes:
       - ./backend:/app
@@ -9,6 +10,7 @@ services:
       - app-network
 
   frontend:
+    
     image: node:20
     working_dir: /app
     volumes:
