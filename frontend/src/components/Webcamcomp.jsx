@@ -62,21 +62,18 @@ export default function Webcamcomp() {
 
     return (
         <>
-            <div className="flex h-screen items-center justify-center">
-            <Webcam
-                audio={false}
-                ref={webcamRef}
-            />
-
-            {capturing ? (
-                <button onClick={handleStopCaptureClick}>
-                    Stop Capture
-                </button>
-            ) : (
-                <button onClick={handleStartCaptureClick}>
-                    Start Capture
-                </button>
-            )}
+            <div className="flex flex-col h-screen items-center justify-center gap-y-5">
+                <Webcam
+                    audio={false}
+                    ref={webcamRef}
+                />
+                <div className = "">
+                    {capturing ? ( <button className = "bg-gray-800 rounded text-white" onClick={handleStopCaptureClick}> Stop Capture </button>) : (
+                    <button className ="bg-gray-800 rounded text-white" onClick={handleStartCaptureClick}>
+                        Start Capture
+                    </button>
+                    )}
+                </div>
 
             {/* {recordedChunks.length > 0 && (
                 <button onClick={handleDownload}>
