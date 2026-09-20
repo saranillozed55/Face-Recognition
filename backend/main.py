@@ -22,7 +22,7 @@ app.add_middleware(
 KNOWN_FACES_DIR = os.path.join(os.path.dirname(__file__), "known_faces")
 
 # lower = stricter match 
-DISTANCE_THRESHOLD = 0.6
+DISTANCE_THRESHOLD = 0.7
 
 
 @app.get("/")
