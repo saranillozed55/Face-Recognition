@@ -3,32 +3,14 @@ import Webcamcomp from "./components/Webcamcomp";
 
 function App() {
 
-  // MOVE THIS TO A COMPONENT - WILL JUST BE A BUTTON TO START RUNNING THE FACE RECOGI
-
-  const API_URL = 'http://localhost:8000/api/start-button'
-
-  const handleSubmit = async (event) => {
-    try{
-
-      event.preventDefault()
-
-      const response = await fetch(API_URL, {
-        method: 'POST'
-      });
-
-      // just send response to log for now in frontend
-      const data = await response.json();
-      console.log(data.message);
-    }
-    catch (error) {
-      console.error('Error sending item:', error)
-    }
-  };
-
   return (
   <>
-    
-    <Webcamcomp></Webcamcomp>
+    <main className="bg-gray-800">
+      <div className = "justify-center items-center flex border-b-3 border-dotted pb-4 pt-4 border-white font-mono">
+        <h1 className = "text-5xl text-white">Facial Recognition</h1>
+      </div>
+      <Webcamcomp></Webcamcomp>
+    </main>
   </>
   )
 }

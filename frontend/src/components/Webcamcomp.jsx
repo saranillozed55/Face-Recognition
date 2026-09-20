@@ -116,11 +116,11 @@ export default function Webcamcomp() {
     return (
         <>
             <div className="flex flex-col h-screen items-center justify-center gap-4">
-                <h1 style={{ fontSize: "1.5rem", fontWeight: "bold" }}>
+                <h1 className = "text-2xl font-mono text-white font-bold">
                     {checking
                         ? "Checking..."
                         : isMe === null
-                        ? "—"
+                        ? "Press Identify Me To Start..."
                         : isMe
                         ? "True"
                         : "False"}
@@ -151,8 +151,9 @@ export default function Webcamcomp() {
                     />
                 </div>
 
-                <div className="flex gap-2">
-                    <button className = "bg-gray-200 text-black rounded cursor-pointer p-2" onClick={handleIdentifyClick} disabled={checking}>
+                <div>
+                    <button className ="bg-gray-500
+                        font-mono text-white rounded cursor-pointer p-2" onClick={handleIdentifyClick} disabled={checking}>
                         Identify Me
                     </button>
                 </div>
