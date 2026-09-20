@@ -49,6 +49,7 @@ async def identify_face(img: UploadFile = File(...)): # parameter comes from a f
         results = DeepFace.find(
             img_path=img_path,
             db_path=KNOWN_FACES_DIR,
+            model_name="Facenet512", # more forigiving so it recognizes webcam and image 
             enforce_detection=True,  # raises ValueError if no face found
             detector_backend="mtcnn",
         )
