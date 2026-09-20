@@ -3,7 +3,7 @@ A facial recognition application for SCE(Software and Compute Engineering) club.
 verification with DeepFace.
 
 ## Live Website
-Website: 
+Website: https://face-recognition-frontend-dlzd.onrender.com/
 
 ## Stack
 * React - Interface and webcam input
