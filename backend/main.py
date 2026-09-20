@@ -29,7 +29,7 @@ DISTANCE_THRESHOLD = 0.6
 def read_root():
     return {"status": "Backend is running"}
 
-
+#return string for image paths
 def _save_temp_file(upload: UploadFile) -> str:
     filename = upload.filename or "upload.jpg"
     suffix = os.path.splitext(filename)[1] or ".jpg"
@@ -89,3 +89,34 @@ async def identify_face(img: UploadFile = File(...)): # parameter comes from a f
     finally:
         if img_path and os.path.exists(img_path):
             os.remove(img_path)
+
+@app.post("/api/verify")
+async def verify_face(reference: UploadFile = File(...), webcam: UploadFile = File(...)):
+    reference_path = None
+    webcam_path = None
+    try:
+        reference_path = _save_temp_file(reference)
+        webcam_path = _save_temp_file(webcam)
+
+        result = DeepFace.verify(
+            img1_path = reference_path,
+            img2_path = webcam_path,
+            enforce_detection = True,
+            detector_backend="mtcnn",
+        )
+
+        return {
+            "samePerson" : bool(result["verified"]),
+            "distance": float(result["distance"]),
+            "threshold": float(result["threshold"]),
+        }
+
+    except ValueError:
+        return{"samePerson": False, "distance": None, "threshold":None}
+    except Exception:
+        raise HTTPException(status_code=500, detail="Verifaction failed")
+
+    finally: #temp files are deleted even if verify throws an exception
+        for p in (reference_path, webcam_path):
+            if p and os.path.exists(p):
+                os.remove(p)

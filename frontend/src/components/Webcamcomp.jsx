@@ -5,12 +5,16 @@ import * as faceapi from "face-api.js";
 export default function Webcamcomp() {
     const webcamRef = useRef(null);
     const canvasRef = useRef(null);
+    const fileInputRef = useRef(null);
 
     const [modelsLoaded, setModelsLoaded] = useState(false);
 
     // null = haven't checked yet, true = it's you, false = no face / not you
     const [isMe, setIsMe] = useState(null);
     const [checking, setChecking] = useState(false);
+
+    const[referenceFile, setReferenceFile] = useState(null);
+    const[referencePreviewUrl, setReferencePreviewUrl] = useState(null);
 
 
     useEffect(() => {
@@ -65,6 +69,20 @@ export default function Webcamcomp() {
         return () => clearInterval(interval);
     }, [modelsLoaded]);
 
+    const handleReferenceUpload = useCallback((event) => {
+        
+        const file = event.target.files?.[0];
+        if(!file) return;
+
+        setReferenceFile(file);
+        setIsMe(null);
+
+        if(referencePreviewUrl) {
+            URL.revokeObjectURL(referencePreviewUrl)
+        }
+
+        setReferencePreviewUrl(URL.createObjectURL(file))
+    },[referencePreviewUrl]);
     
     //identify logic
     const dataURLtoFile = (dataUrl, filename) => {
@@ -80,7 +98,13 @@ export default function Webcamcomp() {
     };
 
     const handleIdentifyClick = useCallback(async () => {
+        if(!referenceFile) {
+            console.error("Please upload a reference photo.");
+            return;
+        }
         const screenshot = webcamRef.current.getScreenshot();
+
+
         if (!screenshot) {
             console.error("Could not capture frame from webcam");
             setIsMe(false);
@@ -88,12 +112,13 @@ export default function Webcamcomp() {
         }
 
         setChecking(true);
-        const file = dataURLtoFile(screenshot, "webcam-capture.jpg");
+        const webcamFile = dataURLtoFile(screenshot, "webcam-capture.jpg");
         const formData = new FormData();
-        formData.append("img", file);
+        formData.append("reference", referenceFile);
+        formData.append("webcam", webcamFile)
 
         try {
-            const response = await fetch("http://localhost:8000/api/identify", {
+            const response = await fetch("http://localhost:8000/api/verify", {
                 method: "POST",
                 body: formData,
             });
@@ -111,7 +136,7 @@ export default function Webcamcomp() {
         } finally {
             setChecking(false);
         }
-    }, []);
+    }, [referenceFile]);
 
     return (
         <>
@@ -125,6 +150,13 @@ export default function Webcamcomp() {
                         ? "True"
                         : "False"}
                 </h1>
+
+                <div className="flex flex-col items-center gap-2">
+                    <input className = "text-white font-mono" type="file" accept ="image/*" ref={fileInputRef} onChange={handleReferenceUpload}/>
+                    {referencePreviewUrl && (
+                        <img src = {referencePreviewUrl} alt = "Reference" style={{ width: 120, height: 120, objectFit: "cover", borderRadius: 8 }}/>
+                    )}
+                </div>
 
                 <div style={{ position: "relative", width: 640, height: 480 }}>
                     <Webcam
