@@ -27,9 +27,6 @@ function App() {
 
   return (
   <>
-    <form onSubmit ={handleSubmit}>
-      <button><strong>Start!</strong></button>
-    </form>
     
     <Webcamcomp></Webcamcomp>
   </>
